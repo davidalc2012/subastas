@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Bid = require('../models/bid');
+const Block = require('../models/block');
 
 //ES6 Promises
 mongoose.Promise = global.Promise;
@@ -16,25 +16,23 @@ function connect(funct){
 }
 
 
-function deleteBids (funct){
-  mongoose.connection.collections.bids.drop(function(err){
+function deleteBlocks (funct){
+  mongoose.connection.collections.blocks.drop(function(err){
     if (err) console.log('Deleting error: ', err);
     console.log('Elements deleted');
     if (funct) funct();
   });
 };
 
-function createBids(funct){
-  var bid;
-  for(var i=0; i<10; i++){
-    bid=new Bid({
-      company: i.toString(),
-      block: "A",
-      amount: Math.floor(Math.random() * 11),
-      //amount: 3,
-      time: new Date().getTime()
+function createBlocks(funct){
+  console.log("entrada");
+  var block;
+  var blockNames =['A', 'B', 'C', 'D'];
+  for(var i=0; i<4; i++){
+    block=new Block({
+      name: blockNames[i]
     });
-    Bid.create(bid, function(err){
+    Block.create(block, function(err){
       if (err) console.log('Creating error');
     });
   }
@@ -44,6 +42,4 @@ function createBids(funct){
 
 //connect(deleteBids(createBids()));
 connect();
-Bid.find({}).sort({amount: -1, time: -1}).exec(function(err, bids){
-    console.log(bids);
-});
+//createBlocks();

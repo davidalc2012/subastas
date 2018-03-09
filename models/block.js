@@ -18,7 +18,7 @@ const BlockSchema = new Schema({
   //TODO check if is better getting the CompanySchema here
   company: {
     type: String
-  }
+  },
   //TODO check if is necesary the minBid in here
   minBid: {
     type: Number

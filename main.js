@@ -1,17 +1,21 @@
 var express = require('express');
-var bindingController = require('./controllers/bindingController');
+var biddingController = require('./controllers/biddingController');
 var socketController = require('./controllers/socketController');
 
 var app = express();
 
 //set up teplate engine
 app.set('view engine', 'ejs');
+app.set('views', __dirname + '/views');
 app.use(express.static('./public'));
 
 //Set controller
-bindingController(app);
-socketController(app);
+biddingController(app);
+//socketController(app);
 
 //Listen to port
-app.listen(3000);
-console.log('You are listening to port 3000');
+var server = app.listen(4000, function(){
+  console.log('Listen to port 4000')
+});
+
+socketController(server);
