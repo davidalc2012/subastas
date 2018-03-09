@@ -22,7 +22,7 @@ module.exports = function(app){
       });
       Company.findOne({name: req.params.name}).then(function(company){
         console.log(company.dispensation);
-        res.render('bidding', {blocks: blocksRes, dispensation: company.dispensation, eligibility: company.eligibility});
+        res.render('biddingView', {blocks: blocksRes, dispensation: company.dispensation, eligibility: company.eligibility});
       });
     });
   });
@@ -31,11 +31,11 @@ module.exports = function(app){
   //
   app.get('/resume', function(req, res){
     //TODO assamble the resume
-    res.render('resume');
+    res.render('resumeView');
   });
 
   //Send control page
   app.get('/control', function(req, res){
-    res.render('control');
+    res.render('controlView');
   });
 }

@@ -14,7 +14,7 @@ module.exports = function(server){
         setTimeout(function(){
           io.sockets.emit('control', {message: 'end-round'});
           console.log('end-round')
-        }, 3000);
+        }, 3000); //TODO cambiar tiempo
       }
     });
 

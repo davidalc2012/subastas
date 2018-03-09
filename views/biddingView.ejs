@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<!-- Add buttons and actions for each one -->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Subasta</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script type="text/javascript">
+      var blocks=[], dispensation, eligibility, orSpans=[], bidsText=[];
+      $(document).ready(function(){
+        <% blocks.forEach(function (block){ %>
+          blocks.push('{name: <%= block.name %>, actualPrice: <%= block.actualPrice %>}');
+          orSpans.push('or<%= block.name %>');
+          bidsText.push('or<%= block.name %>');
+        <% }); %>
+        dispensation = <%= dispensation %>;
+        eligibility = <%= eligibility %>;
+      });
+
+      function sendBids(){
+        blocks.forEach(block){
+            
+        }
+      }
+    </script>
+  </head>
+  <body>
+
+    <center>
+      <div id="container" style="width:500px">
+        <table style="margin-left:0px;margin-top:25px;"class="table table-striped">
+          <thead><tr>
+            <th style="width:25px; " align="center">Bloque</th>
+            <!-- Print block name on table -->
+            <% blocks.forEach(function (block){ %>
+              <!-- TODO check if the company is necesary to show -->
+              <th><%= block.name %></th>
+            <% }); %>
+          </tr></thead>
+
+          <!-- Print block actual price -->
+          <tr>
+            <th>Precio actual</th>
+            <% blocks.forEach(function (block){ %>
+              <td style="width:20px;"><%= block.actualPrice %></td>
+            <% }); %>
+          </tr>
+
+          <!-- Print block minimun bid -->
+          <tr>
+            <th>Precio mínimo</th>
+            <% blocks.forEach(function (block){ %>
+              <td style="width:20px;"><%= block.actualPrice *1.2 %></td>
+            <% }); %>
+          </tr>
+
+          <!-- Print block bid made -->
+          <tr>
+            <th>Oferta realizada</th>
+            <% blocks.forEach(function (block){ %>
+              <td style="width:20px;"><span id=<%="or" + block.name %>>0</span></td>
+            <% }); %>
+          </tr>
+
+          <!-- Make textboxes for the bid -->
+          <tr>
+            <th>Ofertar</th>
+            <% blocks.forEach(function (block){ %>
+              <td style="width:20px;"><input type="text" id=<%="bid" + block.name %> style="width:90px;" placeholder="0"/></td>
+            <% }); %>
+          </tr>
+          <!-- TODO use alerts -->
+          <p class="text-center" id="alerta"></p>
+
+
+        </table>
+      </div>
+
+      <!--TODO Implement sendBid and useDispensation -->
+      <a class="btn btn-lg btn-link" role="button" onclick="sendBid()">Ofertar</a>
+      <a class="btn btn-lg btn-link" role="button" onclick="UseDispensation()">Usar dispensa</a>
+    </center>
+
+    <script src="/assets/biddingJS.js"></script>
+  </body>
+</html>
