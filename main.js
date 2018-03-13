@@ -11,7 +11,6 @@ app.use(express.static('./public'));
 
 //Set controller
 biddingController(app);
-//socketController(app);
 
 //Listen to port
 var server = app.listen(4000, function(){

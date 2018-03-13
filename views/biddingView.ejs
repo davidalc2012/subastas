@@ -8,29 +8,131 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script type="text/javascript">
-      var blocks=[], dispensation, eligibility, orSpans=[], bidsText=[];
+      var blocks=[], dispensation, eligibility, orSpans=[], bidsText=[], alert;
       $(document).ready(function(){
+        //Add event to buttons
+        document.getElementById('btn_send').addEventListener('click', sendBids);
+        document.getElementById('btn_dis').addEventListener('click', sendDisp);
+
         <% blocks.forEach(function (block){ %>
-          blocks.push('{name: <%= block.name %>, actualPrice: <%= block.actualPrice %>}');
+          blocks.push({name: '<%= block.name %>', actualPrice: <%= block.actualPrice %>});
           orSpans.push('or<%= block.name %>');
-          bidsText.push('or<%= block.name %>');
+          bidsText.push('bid<%= block.name %>');
         <% }); %>
         dispensation = <%= dispensation %>;
         eligibility = <%= eligibility %>;
+
+        alert = document.getElementById('alert');
+        //check Eligibility
+        if(eligibility === 0){
+          alert.innerHTML = "Ya no cuentas con puntos de eligibilidad.<br>";
+          document.getElementById('btn_send').removeEventListener('click', sendBids);
+          document.getElementById('btn_dis').removeEventListener('click', sendDisp);
+          bidsText.forEach(function(bidText){
+            document.getElementById(bidText).disabled= true;
+          });
+        }
+
+        //Check useDispensation
+        if(dispensation === 0){
+          document.getElementById('btn_dis').removeEventListener('click', sendDisp);
+          alert.innerHTML += "\n Ya no cuentas con dispensas";
+        }
       });
 
       function sendBids(){
-        blocks.forEach(block){
-            
+        var error = 0, empty = 0, totalBids = [];
+
+        alert.innerHTML = "";
+        blocks.forEach(function (block){
+          document.getElementById('alert'+block.name).innerHTML = "";
+          var bidAmount = document.getElementById('bid'+block.name).value;
+          //Check if the bid was empty
+          if (bidAmount === ""){
+            empty++;
+          //Validation for letters
+          } else if (!parseFloat(bidAmount)){
+            document.getElementById('alert'+block.name).innerHTML = "Sólo puedes introducir números";
+          }
+          //Validate that the amount is higher than the minimum
+          else if (bidAmount < block.actualPrice*1.2){
+            document.getElementById('alert'+block.name).innerHTML = "El monto es muy bajo";
+            error = 1;
+          }
+          else {
+            document.getElementById('or'+block.name).innerHTML = bidAmount;
+            //TODO change the company name
+            totalBids.push({company: 'A', block: block.name, amount: bidAmount});
+          }
+
+        });
+        if (error === 1){
+          //Any amount was lower than the minimum
+          alert.innerHTML = "No fue posible enviar tu oferta";
+        } else if(empty === blocks.length)
+          //There wasn't offers
+          alert.innerHTML = "No has ofertado";
+        else {
+          //At least one block was offerted.
+          //Send POST request
+          totalBids.forEach(function(bid){
+            $.ajax({
+              type: 'POST',
+              url: '/bids',
+              data: bid,
+              success: function(data){
+                //TODO block the buttons and send message for waiting to the end of round
+                document.getElementById('alert'+bid.block).innerHTML = "Subasta enviada";
+              }
+            });
+
+          });
+          alert.innerHTML = "Espera a que la ronda termine";
+          document.getElementById('btn_send').removeEventListener('click', sendBids);
+          document.getElementById('btn_dis').removeEventListener('click', sendDisp);
+          bidsText.forEach(function(bidText){
+            document.getElementById(bidText).disabled= true;
+          });
         }
       }
+
+      function sendDisp(){
+        $.ajax({
+            type: 'PUT',
+            url: '/dispensation/C',
+            //data: {company: 'C'},
+            success: function(data){
+              alert.innerHTML = "Tu dispensa ha sido enviada correctamente";
+              document.getElementById('btn_send').removeEventListener('click', sendBids);
+              document.getElementById('btn_dis').removeEventListener('click', sendDisp);
+              bidsText.forEach(function(bidText){
+                document.getElementById(bidText).disabled = true;
+              });
+              console.log(data);
+        }
+      });
+    }
+
+
     </script>
   </head>
   <body>
 
     <center>
-      <div id="container" style="width:500px">
-        <table style="margin-left:0px;margin-top:25px;"class="table table-striped">
+      <div style="width:600px">
+        <table style="margin-left:0px;margin-top:25px;">
+          <tr>
+            <th>Dispensas disponibles:</th>
+            <td><%= dispensation %></td>
+          </tr>
+          <tr>
+            <th>Eligibilidad:</th>
+            <td><%= eligibility %></td>
+          </tr>
+        </table>
+      </div>
+      <div id="container" style="width:700px">
+        <table style="margin-left:0px;margin-top:25px;" class="table table-striped">
           <thead><tr>
             <th style="width:25px; " align="center">Bloque</th>
             <!-- Print block name on table -->
@@ -44,7 +146,7 @@
           <tr>
             <th>Precio actual</th>
             <% blocks.forEach(function (block){ %>
-              <td style="width:20px;"><%= block.actualPrice %></td>
+              <td style="width:20px;" align="center"><%= block.actualPrice %></td>
             <% }); %>
           </tr>
 
@@ -52,7 +154,7 @@
           <tr>
             <th>Precio mínimo</th>
             <% blocks.forEach(function (block){ %>
-              <td style="width:20px;"><%= block.actualPrice *1.2 %></td>
+              <td style="width:20px;" align="center"><%= block.actualPrice *1.2 %></td>
             <% }); %>
           </tr>
 
@@ -60,7 +162,7 @@
           <tr>
             <th>Oferta realizada</th>
             <% blocks.forEach(function (block){ %>
-              <td style="width:20px;"><span id=<%="or" + block.name %>>0</span></td>
+              <td style="width:20px;" align="center"><span id=<%="or" + block.name %>>0</span></td>
             <% }); %>
           </tr>
 
@@ -71,16 +173,26 @@
               <td style="width:20px;"><input type="text" id=<%="bid" + block.name %> style="width:90px;" placeholder="0"/></td>
             <% }); %>
           </tr>
+
+          <!-- Make alerts labels for the bid -->
+          <tr>
+            <th></th>
+            <% blocks.forEach(function (block){ %>
+              <td style="width:20px;"><p class="text-center" id=<%="alert" + block.name %>></p></td>
+            <% }); %>
+          </tr>
+
+
           <!-- TODO use alerts -->
-          <p class="text-center" id="alerta"></p>
+          <p class="text-center" id="alert"></p>
 
 
         </table>
       </div>
 
       <!--TODO Implement sendBid and useDispensation -->
-      <a class="btn btn-lg btn-link" role="button" onclick="sendBid()">Ofertar</a>
-      <a class="btn btn-lg btn-link" role="button" onclick="UseDispensation()">Usar dispensa</a>
+      <a id="btn_send" class="btn btn-lg btn-link" role="button">Ofertar</a>
+      <a id="btn_dis" class="btn btn-lg btn-link" role="button">Usar dispensa</a>
     </center>
 
     <script src="/assets/biddingJS.js"></script>

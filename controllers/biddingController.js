@@ -8,6 +8,7 @@ var urlencoderParser = bodyParser.urlencoded({extended: false});
 
 //TODO change the IP
 mongoose.connect('mongodb://localhost/biding');
+mongoose.Promise = global.Promise;
 
 module.exports = function(app){
 
@@ -21,8 +22,16 @@ module.exports = function(app){
         blocksRes.push({name: block.name, actualPrice: block.actualPrice});
       });
       Company.findOne({name: req.params.name}).then(function(company){
-        console.log(company.dispensation);
+        // if (!aux){
+        //   aux = Company({name: req.params.name}).save(function(err, data){
+        //       if (err) console.log('Creating error');
+        //       aux = data;
+        //       console.log('Auxiliar 2: ', aux);
+        //   });
+        // }
         res.render('biddingView', {blocks: blocksRes, dispensation: company.dispensation, eligibility: company.eligibility});
+        //}
+
       });
     });
   });
@@ -38,4 +47,28 @@ module.exports = function(app){
   app.get('/control', function(req, res){
     res.render('controlView');
   });
+
+  //Save a bid from a specific Company {company, block, amount}
+  app.post('/bids', urlencoderParser, function(req, res){
+    var newBid = Bid(req.body);
+    newBid.time = new Date().getTime();
+    newBid.save(function(err){
+      if (err) {
+        console.log('error: ' + err);
+        res.send(err);
+      }
+      res.json(newBid);
+    });
+  });
+
+  //Rest the dispensation from a company
+  app.put('/dispensation/:comp', function(req, res){
+    console.log(req.params.comp);
+    Company.findOneAndUpdate({name: req.params.comp}, {$inc: {dispensation: -1}}, function(err, company){
+      if(err) console.log(err);
+      res.send(company);
+    });
+
+  });
+
 }
