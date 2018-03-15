@@ -18,6 +18,9 @@ const BidSchema = new Schema({
   },
   time: {
     type: String
+  },
+  round: {
+    type: Number
   }
 });
 

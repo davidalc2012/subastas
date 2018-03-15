@@ -1,21 +1,31 @@
 var socket = require('socket.io');
-
+var resumeController = require('./resumeController');
 //WebSocket configuration
 module.exports = function(server){
+  var timer;
   var io = socket(server);
   io.on('connection', function(socket){
     console.log('Connection made: ', socket.id);
 
-
     //Get a control message to start the timer and round
     socket.on('control', function(data){
-      console.log(data.message);
       if (data.message === 'start-round'){
-        setTimeout(function(){
-          io.sockets.emit('control', {message: 'end-round'});
-          console.log('end-round')
+        socket.broadcast.emit('control', {message: 'start-round'});
+        timer = setTimeout(function(){
+          process.env.ROUND++;
+          console.log("YA");
+          resumeController(io);
         }, 3000); //TODO cambiar tiempo
+      } else if (data.message === "stop-round"){
+        clearTimeout(timer);
+        process.env.ROUND++;
+        io.sockets.emit('control', {message: 'end-round', round: process.env.ROUND});
       }
+    });
+
+    socket.on('register', function(data){
+      console.log(data);
+      io.sockets.emit('register',data);
     });
 
   });

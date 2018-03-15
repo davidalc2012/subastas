@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 var Company = require('../models/company');
 var Bid = require('../models/bid');
 var Block = require('../models/block');
+var Resume = require('../models/resume');
 var urlencoderParser = bodyParser.urlencoded({extended: false});
 
 
@@ -12,11 +13,48 @@ mongoose.Promise = global.Promise;
 
 module.exports = function(app){
 
+  //Get the blocks
+  app.get('/blocks', function(req, res){
+    Block.find({}).sort({name: 1}).then(function(block){
+      res.json(block);
+    });
+  });
+
+  //Get the resumes
+  app.get('/resumeData', function(req, res){
+    Resume.find({}).sort({company: 1}).then(function(resumes){
+      res.json(resumes);
+    });
+  });
+
+  //Get all the companies
+  app.get('/companies', function(req, res){
+    Company.find({}).then(function(companies){
+      res.send(companies);
+    })
+  });
+
+  //Render the login page
+  app.get('/login', function(req, res){
+      res.render('loginView');
+  });
+
+//Register the new company
+app.post('/login', urlencoderParser, function(req, res){
+  var newCompany = Company(req.body);
+  newCompany.save(function(err){
+    if (err) {
+      console.log('error: ' + err);
+    }
+    res.json(newCompany);
+  });
+});
+
   //Send the data for the actual round, blocks and prices, dispensation and Eligibility
   //{[block, actualPrice], dispensation, eligibility}
   app.get('/bidding/:name', function(req, res){
     //Search for all the blocks
-    Block.find({}).then(function(blocks){
+    Block.find({}).sort({name: 1}).then(function(blocks){
       var blocksRes = [];
       blocks.forEach(function(block){
         blocksRes.push({name: block.name, actualPrice: block.actualPrice});
@@ -52,6 +90,7 @@ module.exports = function(app){
   app.post('/bids', urlencoderParser, function(req, res){
     var newBid = Bid(req.body);
     newBid.time = new Date().getTime();
+    newBid.round = parseFloat(process.env.ROUND) + 1;
     newBid.save(function(err){
       if (err) {
         console.log('error: ' + err);

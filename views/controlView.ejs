@@ -5,11 +5,25 @@
     <title>Control</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   </head>
   <body>
     <h1>Página de control</h1>
-    <button id="start">Iniciar</button>
+    <p id="round">Rondas finalizadas: 0</p>
+    <button id="start">Iniciar ronda</button>
+    <button id="stop">Detener ronda</button>
     <p id="info"></p>
+
+    <center>
+      <table style="margin-left:0px;margin-top:25px;" class="table table-striped" id="companies">
+        <thead><tr>
+          <th style="width:25px; " align="center">Compañia</th>
+          <th style="width:25px; " align="center">Dispensas</th>
+          <th style="width:25px; " align="center">Eligibilidad</th>
+        </tr></thead>
+      </table>
+    </center>
+
     <script src="/assets/controlJS.js"></script>
   </body>
 </html>

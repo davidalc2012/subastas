@@ -41,5 +41,5 @@ function createBlocks(funct){
 };
 
 //connect(deleteBids(createBids()));
-connect();
+connect(createBlocks());
 //createBlocks();
