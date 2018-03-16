@@ -14,7 +14,7 @@ module.exports = function(server){
         timer = setTimeout(function(){
           process.env.ROUND++;
           resumeController(io);
-        }, 3000); //TODO cambiar tiempo
+        }, 10000); //TODO cambiar tiempo
       } else if (data.message === "stop-round"){
         clearTimeout(timer);
         process.env.ROUND++;
@@ -23,7 +23,6 @@ module.exports = function(server){
     });
 
     socket.on('register', function(data){
-      console.log(data);
       io.sockets.emit('register',data);
     });
 

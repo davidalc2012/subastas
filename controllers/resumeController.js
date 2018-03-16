@@ -33,7 +33,7 @@ module.exports = function(io){
         var newResume = new Resume();
         newResume.company=company.name;
         newResume.round = process.env.ROUND;
-        Bid.find({company: company.name}, {amount: 1, block: 1, _id: 0}).sort({block: 1}).then(function(bids){
+        Bid.find({company: company.name, round: process.env.ROUND}, {amount: 1, block: 1, _id: 0}).sort({block: 1}).then(function(bids){
           newResume.amounts=bids;
           Resume(newResume).save();
         });

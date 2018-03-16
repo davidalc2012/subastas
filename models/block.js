@@ -15,14 +15,10 @@ const BlockSchema = new Schema({
     type: Number,
     default: 100
   },
-  //TODO check if is better getting the CompanySchema here
   company: {
-    type: String
+    type: String,
+    default: ""
   },
-  //TODO check if is necesary the minBid in here
-  minBid: {
-    type: Number
-  }
 });
 
 const Block = mongoose.model('block', BlockSchema);

@@ -5,6 +5,11 @@ var socket = io.connect('http://148.205.36.16:4000');
 var info = document.getElementById('info');
 
 socket.on('control', function(data){
+  blocks.forEach(function(block){
+    if (block.company === sessionStorage.getItem('company')){
+      doBid = 1;
+    }
+  });
   if (data.message === "end-round"){
     if (doBid === 0) {
       $.ajax({
@@ -12,7 +17,6 @@ socket.on('control', function(data){
         url: '/eligibility',
         data: {company: sessionStorage.getItem('company')},
         success: function(data){
-          console.log("ELIGIBILITY")
         }
       });
     }

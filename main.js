@@ -10,7 +10,7 @@ app.set('views', __dirname + '/views');
 app.use(express.static('./public'));
 
 //Set round number to 0
-process.env.ROUND = 1;
+process.env.ROUND = 0;
 process.env.COMPANIES = 0;
 
 //Set controller

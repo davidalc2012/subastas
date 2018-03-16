@@ -15,13 +15,30 @@ module.exports = function(app){
 
   Company.count({}, function(err, count){
     process.env.COMPANIES = count;
-    console.log(count);
   })
 
   //Get the blocks
   app.get('/blocks', function(req, res){
     Block.find({}).sort({name: 1}).then(function(block){
       res.json(block);
+    });
+  });
+
+  //Set the page for add blocks
+  app.get('/blocks/new', function(req, res){
+    Block.find({}).sort({name: 1}).then(function(block){
+      res.render('blocksView');
+    });
+  });
+
+  //Save a block
+  app.post('/blocks/new', urlencoderParser, function(req, res){
+    var newBlock = Block(req.body);
+    newBlock.save(function(err){
+      if (err) {
+        console.log('error: ' + err);
+      }
+      res.json(newBlock);
     });
   });
 
@@ -61,8 +78,6 @@ app.post('/login', urlencoderParser, function(req, res){
 //handle eligibility decrement
 //Register the new company
 app.post('/eligibility', urlencoderParser, function(req, res){
-  console.log("ELIGIBILITY");
-  console.log(req.body);
   Company.findOneAndUpdate({name: req.body.company}, {$inc: {eligibility: -1}}, function(err, company){
     if(err) console.log(err);
     res.send(company);
@@ -76,27 +91,17 @@ app.post('/eligibility', urlencoderParser, function(req, res){
     Block.find({}).sort({name: 1}).then(function(blocks){
       var blocksRes = [];
       blocks.forEach(function(block){
-        blocksRes.push({name: block.name, actualPrice: block.actualPrice});
+        blocksRes.push({name: block.name, actualPrice: block.actualPrice, company: block.company});
       });
       Company.findOne({name: req.params.name}).then(function(company){
-        // if (!aux){
-        //   aux = Company({name: req.params.name}).save(function(err, data){
-        //       if (err) console.log('Creating error');
-        //       aux = data;
-        //       console.log('Auxiliar 2: ', aux);
-        //   });
-        // }
-        res.render('biddingView', {blocks: blocksRes, dispensation: company.dispensation, eligibility: company.eligibility});
-        //}
+        res.render('biddingView', {blocks: blocksRes, dispensation: company.dispensation, eligibility: company.eligibility, company: req.params.name});
 
       });
     });
   });
 
   //Send all the information of all the rounds
-  //
   app.get('/resume', function(req, res){
-    //TODO assamble the resume
     res.render('resumeView');
   });
 
@@ -121,7 +126,6 @@ app.post('/eligibility', urlencoderParser, function(req, res){
 
   //Rest the dispensation from a company
   app.put('/dispensation/:comp', function(req, res){
-    console.log(req.params.comp);
     Company.findOneAndUpdate({name: req.params.comp}, {$inc: {dispensation: -1}}, function(err, company){
       if(err) console.log(err);
       res.send(company);

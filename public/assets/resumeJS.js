@@ -9,15 +9,13 @@ function setResumes(){
     type: 'GET',
     url: '/resumeData',
     success: function(data){
-      //console.log(data.resumes);
       var stringHeader = "";
       for (var i = 0; i<blocksNames.length;i++){
         stringHeader += "<th>"+blocksNames[i]+"</th>";
       }
       stringHeader = "<thead><tr><th>Compañias\\Bloques</th>" + stringHeader + "</tr></thead>"
 
-
-      for (var i = 0; i<=data.round; i++){
+      for (var i = 0; i<data.round; i++){
         var divRound = document.createElement("div"),
           tableRound = document.createElement("table"),
           tbodyRound = document.createElement("tbody");
@@ -27,14 +25,15 @@ function setResumes(){
 
         for (var j=0; j<data.companies;j++){
           var amountsInfo = data.resumes.shift();
-          //console.log(amountsInfo);
+
           var row = document.createElement("tr");
           row.innerHTML = "<td>" + amountsInfo.company + "</td>";
           var count = 0;
           for(var k = 0; k<blocksNames.length; k++){
             if(!amountsInfo.amounts[count]){
-              k=blocksNames.length;
-            } else if(amountsInfo.amounts[count].block === blocksNames[k]){
+              row.innerHTML += "<td>-</td>";
+            } else
+            if(amountsInfo.amounts[count].block === blocksNames[k]){
               row.innerHTML += "<td>" + amountsInfo.amounts[count].amount + "</td>";
               count++;
             } else {
@@ -70,6 +69,7 @@ $.ajax({
     for (var i = 0; i<blocks.length;i++){
       blocksNames[i] = blocks[i].name;
       var row = document.createElement("tr");
+      var company = "";
       row.innerHTML = '<td>'+blocks[i].name+'</td><td>'+blocks[i].company+'</td><td>'+blocks[i].actualPrice+'</td>'
       tbodyElement.appendChild(row);
     }

@@ -11,13 +11,13 @@
       var blocks=[], dispensation, eligibility, orSpans=[], bidsText=[], alert, company, doBid = 0;
       $(document).ready(function(){
         company = sessionStorage.getItem('company');
-        console.log(company);
+
         //Add event to buttons
         document.getElementById('btn_send').addEventListener('click', sendBids);
         document.getElementById('btn_dis').addEventListener('click', sendDisp);
 
         <% blocks.forEach(function (block){ %>
-          blocks.push({name: '<%= block.name %>', actualPrice: <%= block.actualPrice %>});
+          blocks.push({name: '<%= block.name %>', company: '<%= block.company %>', actualPrice: <%= block.actualPrice %>});
           orSpans.push('or<%= block.name %>');
           bidsText.push('bid<%= block.name %>');
         <% }); %>
@@ -37,15 +37,17 @@
 
         //Check useDispensation
         if(dispensation === 0){
+          doBid = 1;
           document.getElementById('btn_dis').removeEventListener('click', sendDisp);
           alert.innerHTML += "\n Ya no cuentas con dispensas";
         }
       });
 
       function sendBids(){
-        var error = 0, empty = 0, totalBids = [];
+        var error = 0, empty = 0, totalBids = [], counter = 0;;
 
         alert.innerHTML = "";
+
         blocks.forEach(function (block){
           document.getElementById('alert'+block.name).innerHTML = "";
           var bidAmount = document.getElementById('bid'+block.name).value;
@@ -65,10 +67,13 @@
             document.getElementById('or'+block.name).innerHTML = bidAmount;
             //TODO change the company name
             totalBids.push({company: company, block: block.name, amount: bidAmount});
+            counter++;
           }
 
         });
-        if (error === 1){
+        if (counter>eligibility){
+          alert.innerHTML = "Tu número de ofertas es mayor a tu número de eligibilidad";
+        } else if (error === 1){
           //Any amount was lower than the minimum
           alert.innerHTML = "No fue posible enviar tu oferta";
         } else if(empty === blocks.length)
@@ -110,7 +115,7 @@
               bidsText.forEach(function(bidText){
                 document.getElementById(bidText).disabled = true;
               });
-              console.log(data);
+              doBid = 1;
         }
       });
     }
@@ -139,8 +144,12 @@
             <th style="width:25px; " align="center">Bloque</th>
             <!-- Print block name on table -->
             <% blocks.forEach(function (block){ %>
-              <!-- TODO check if the company is necesary to show -->
-              <th><%= block.name %></th>
+              <% if (block.company == company){ %>
+                <th bgcolor="#ee8a8a"><%= block.name %></th>
+              <% } %>
+              <% if (block.company != company){ %>
+                <th><%= block.name %></th>
+              <% } %>
             <% }); %>
           </tr></thead>
 
@@ -148,7 +157,12 @@
           <tr>
             <th>Precio actual</th>
             <% blocks.forEach(function (block){ %>
-              <td style="width:20px;" align="center"><%= block.actualPrice %></td>
+              <% if (block.company == company){ %>
+                <td style="width:20px;" align="center" bgcolor="#ee8a8a"><%= block.actualPrice %></td>
+              <% } %>
+              <% if (block.company != company){ %>
+                <td style="width:20px;" align="center"><%= block.actualPrice %></td>
+              <% } %>
             <% }); %>
           </tr>
 
@@ -156,7 +170,12 @@
           <tr>
             <th>Precio mínimo</th>
             <% blocks.forEach(function (block){ %>
+              <% if (block.company == company){ %>
+              <td style="width:20px;" align="center" bgcolor="#ee8a8a"><%= block.actualPrice *1.2 %></td>
+              <% } %>
+              <% if (block.company != company){ %>
               <td style="width:20px;" align="center"><%= block.actualPrice *1.2 %></td>
+              <% } %>
             <% }); %>
           </tr>
 
@@ -164,7 +183,12 @@
           <tr>
             <th>Oferta realizada</th>
             <% blocks.forEach(function (block){ %>
+              <% if (block.company == company){ %>
+              <td style="width:20px;" align="center" bgcolor="#ee8a8a"><span id=<%="or" + block.name %>>0</span></td>
+              <% } %>
+              <% if (block.company != company){ %>
               <td style="width:20px;" align="center"><span id=<%="or" + block.name %>>0</span></td>
+              <% } %>
             <% }); %>
           </tr>
 
@@ -172,7 +196,12 @@
           <tr>
             <th>Ofertar</th>
             <% blocks.forEach(function (block){ %>
-              <td style="width:20px;"><input type="text" id=<%="bid" + block.name %> style="width:90px;" placeholder="0"/></td>
+              <% if (block.company == company){ %>
+              <td style="width:20px;" align="center" bgcolor="#ee8a8a"><input type="text" id=<%="bid" + block.name %> style="width:90px;" placeholder="0"/></td>
+              <% } %>
+              <% if (block.company != company){ %>
+              <td style="width:20px;" align="center"><input type="text" id=<%="bid" + block.name %> style="width:90px;" placeholder="0"/></td>
+              <% } %>
             <% }); %>
           </tr>
 
@@ -180,7 +209,13 @@
           <tr>
             <th></th>
             <% blocks.forEach(function (block){ %>
-              <td style="width:20px;"><p class="text-center" id=<%="alert" + block.name %>></p></td>
+              <% if (block.company == company){ %>
+              <td style="width:20px;" align="center" bgcolor="#ee8a8a"><p class="text-center" id=<%="alert" + block.name %>></p></td>
+              <% } %>
+              <% if (block.company != company){ %>
+              <td style="width:20px;" align="center"><p class="text-center" id=<%="alert" + block.name %>></p></td>
+              <% } %>
+
             <% }); %>
           </tr>
 

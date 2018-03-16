@@ -32,7 +32,6 @@ socket.on('control', function(data){
   if (data.message === 'end-round') {
     info.innerHTML = 'Fin de ronda';
     round.innerHTML = "Rondas finalizadas: " + data.round;
-    console.log(data.table);
   }
 });
 
