@@ -13,6 +13,11 @@ mongoose.Promise = global.Promise;
 
 module.exports = function(app){
 
+  Company.count({}, function(err, count){
+    process.env.COMPANIES = count;
+    console.log(count);
+  })
+
   //Get the blocks
   app.get('/blocks', function(req, res){
     Block.find({}).sort({name: 1}).then(function(block){
@@ -20,10 +25,10 @@ module.exports = function(app){
     });
   });
 
-  //Get the resumes
+  //Get the resumes and round number
   app.get('/resumeData', function(req, res){
-    Resume.find({}).sort({company: 1}).then(function(resumes){
-      res.json(resumes);
+    Resume.find({}).sort({round: 1, company: 1}).then(function(resumes){
+      res.json({round: process.env.ROUND, companies: process.env.COMPANIES, resumes: resumes});
     });
   });
 
@@ -46,7 +51,21 @@ app.post('/login', urlencoderParser, function(req, res){
     if (err) {
       console.log('error: ' + err);
     }
+    Company.count({}, function(err, count){
+      process.env.COMPANIES = count;
+    })
     res.json(newCompany);
+  });
+});
+
+//handle eligibility decrement
+//Register the new company
+app.post('/eligibility', urlencoderParser, function(req, res){
+  console.log("ELIGIBILITY");
+  console.log(req.body);
+  Company.findOneAndUpdate({name: req.body.company}, {$inc: {eligibility: -1}}, function(err, company){
+    if(err) console.log(err);
+    res.send(company);
   });
 });
 

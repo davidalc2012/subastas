@@ -13,13 +13,12 @@ module.exports = function(server){
         socket.broadcast.emit('control', {message: 'start-round'});
         timer = setTimeout(function(){
           process.env.ROUND++;
-          console.log("YA");
           resumeController(io);
         }, 3000); //TODO cambiar tiempo
       } else if (data.message === "stop-round"){
         clearTimeout(timer);
         process.env.ROUND++;
-        io.sockets.emit('control', {message: 'end-round', round: process.env.ROUND});
+        resumeController(io);
       }
     });
 

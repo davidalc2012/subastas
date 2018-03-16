@@ -3,7 +3,8 @@ const Schema = mongoose.Schema;
 
 //Create Schema and Model
 const AmountSchema = new Schema({
-    amount: Number
+  block: String,
+  amount: Number
 });
 
 const ResumeSchema = new Schema({

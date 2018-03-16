@@ -8,7 +8,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script type="text/javascript">
-      var blocks=[], dispensation, eligibility, orSpans=[], bidsText=[], alert, company;
+      var blocks=[], dispensation, eligibility, orSpans=[], bidsText=[], alert, company, doBid = 0;
       $(document).ready(function(){
         company = sessionStorage.getItem('company');
         console.log(company);
@@ -23,10 +23,10 @@
         <% }); %>
         dispensation = <%= dispensation %>;
         eligibility = <%= eligibility %>;
-
         alert = document.getElementById('alert');
         //check Eligibility
         if(eligibility === 0){
+          doBid = 1;
           alert.innerHTML = "Ya no cuentas con puntos de eligibilidad.<br>";
           document.getElementById('btn_send').removeEventListener('click', sendBids);
           document.getElementById('btn_dis').removeEventListener('click', sendDisp);
@@ -85,6 +85,7 @@
               success: function(data){
                 //TODO block the buttons and send message for waiting to the end of round
                 document.getElementById('alert'+bid.block).innerHTML = "Subasta enviada";
+                doBid = 1;
               }
             });
 
