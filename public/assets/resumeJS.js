@@ -15,13 +15,13 @@ function setResumes(){
       }
       stringHeader = "<thead><tr><th>Compañias\\Bloques</th>" + stringHeader + "</tr></thead>"
 
-      for (var i = 0; i<data.round; i++){
+      for (var i = data.round; i>0; i--){
         var divRound = document.createElement("div"),
           tableRound = document.createElement("table"),
           tbodyRound = document.createElement("tbody");
 
         tableRound.innerHTML = stringHeader;
-        divRound.innerHTML = '<h3>Ronda ' + (i+1) + '</h3>';
+        divRound.innerHTML = '<h3>Ronda ' + i + '</h3>';
 
         for (var j=0; j<data.companies;j++){
           var amountsInfo = data.resumes.shift();
@@ -64,7 +64,9 @@ $.ajax({
     var blocksDIV = document.createElement("div"),
       blocksTable = document.createElement("table"),
       tbodyElement = document.createElement("tbody");
-    blocksTable.innerHTML += '<thead><tr><th>Bloque</th><th>Compañia</th><th>Precio</th></tr></thead>';
+
+    roundsDIV.innerHTML = "<h2>Postura válida más alta</h2>"
+    blocksTable.innerHTML += '<thead><tr><th>Bloque</th><th>Compañia</th><th>PVMA</th></tr></thead>';
 
     for (var i = 0; i<blocks.length;i++){
       blocksNames[i] = blocks[i].name;

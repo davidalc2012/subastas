@@ -41,7 +41,7 @@ module.exports = function(io){
     });
 
   setTimeout(function(){
-    Resume.find({}).sort({round: 1, company: 1}).then(function(resumes){
+    Resume.find({}).sort({round: -1, company: 1}).then(function(resumes){
       // Company.find({}, {name: 1, _id: 0}).then(function(companies){
       //   companies.forEach(function(company){
       //

@@ -23,6 +23,7 @@
         <% }); %>
         dispensation = <%= dispensation %>;
         eligibility = <%= eligibility %>;
+        round = <%= round %>;
         alert = document.getElementById('alert');
         //check Eligibility
         if(eligibility === 0){
@@ -89,8 +90,11 @@
               data: bid,
               success: function(data){
                 //TODO block the buttons and send message for waiting to the end of round
-                document.getElementById('alert'+bid.block).innerHTML = "Subasta enviada";
+                document.getElementById('alert'+bid.block).innerHTML = "Oferta enviada";
                 doBid = 1;
+                blocks.forEach(function (block){
+                  document.getElementById('bid'+block.name).value="";
+                });
               }
             });
 
@@ -127,16 +131,9 @@
 
     <center>
       <div style="width:600px">
-        <table style="margin-left:0px;margin-top:25px;">
-          <tr>
-            <th>Dispensas disponibles:</th>
-            <td><%= dispensation %></td>
-          </tr>
-          <tr>
-            <th>Eligibilidad:</th>
-            <td><%= eligibility %></td>
-          </tr>
-        </table>
+        <h3>Ronda: <%= round-(-1) %></h3>
+        <h4>Dispensas disponibles: <%= dispensation %></h4>
+        <h4>Eligibilidad: <%= eligibility %></h4>
       </div>
       <div id="container" style="width:700px">
         <table style="margin-left:0px;margin-top:25px;" class="table table-striped">
@@ -197,7 +194,7 @@
             <th>Ofertar</th>
             <% blocks.forEach(function (block){ %>
               <% if (block.company == company){ %>
-              <td style="width:20px;" align="center" bgcolor="#ee8a8a"><input type="text" id=<%="bid" + block.name %> style="width:90px;" placeholder="0"/></td>
+              <td style="width:20px;" align="center" bgcolor="#ee8a8a"><input type="text" id=<%="bid" + block.name %> style="width:90px;"/></td>
               <% } %>
               <% if (block.company != company){ %>
               <td style="width:20px;" align="center"><input type="text" id=<%="bid" + block.name %> style="width:90px;" placeholder="0"/></td>

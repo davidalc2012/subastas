@@ -44,7 +44,7 @@ module.exports = function(app){
 
   //Get the resumes and round number
   app.get('/resumeData', function(req, res){
-    Resume.find({}).sort({round: 1, company: 1}).then(function(resumes){
+    Resume.find({}).sort({round: -1, company: 1}).then(function(resumes){
       res.json({round: process.env.ROUND, companies: process.env.COMPANIES, resumes: resumes});
     });
   });
@@ -94,7 +94,7 @@ app.post('/eligibility', urlencoderParser, function(req, res){
         blocksRes.push({name: block.name, actualPrice: block.actualPrice, company: block.company});
       });
       Company.findOne({name: req.params.name}).then(function(company){
-        res.render('biddingView', {blocks: blocksRes, dispensation: company.dispensation, eligibility: company.eligibility, company: req.params.name});
+        res.render('biddingView', {blocks: blocksRes, dispensation: company.dispensation, eligibility: company.eligibility, company: req.params.name, round: process.env.ROUND});
 
       });
     });
