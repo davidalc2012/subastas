@@ -94,7 +94,7 @@ app.post('/eligibility', urlencoderParser, function(req, res){
         blocksRes.push({name: block.name, actualPrice: block.actualPrice, company: block.company});
       });
       Company.findOne({name: req.params.name}).then(function(company){
-        res.render('biddingView', {blocks: blocksRes, dispensation: company.dispensation, eligibility: company.eligibility, company: req.params.name, round: process.env.ROUND});
+        res.render('biddingView', {blocks: blocksRes, dispensation: company.dispensation, eligibility: company.eligibility, company: req.params.name, round: process.env.ROUND, increment: process.env.INCREMENT});
 
       });
     });

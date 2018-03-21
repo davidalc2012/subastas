@@ -12,7 +12,7 @@ app.use(express.static('./public'));
 //Set round number to 0
 process.env.ROUND = 0;
 process.env.COMPANIES = 0;
-
+process.env.INCREMENT = 0.20;
 //Set controller
 biddingController(app);
 

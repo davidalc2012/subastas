@@ -8,7 +8,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script type="text/javascript">
-      var blocks=[], dispensation, eligibility, orSpans=[], bidsText=[], alert, company, doBid = 0;
+      var blocks=[], dispensation, eligibility, eligibilityFinal, orSpans=[], bidsText=[], alert, company, doBid = 0, own = 0, increment;
       $(document).ready(function(){
         company = sessionStorage.getItem('company');
 
@@ -23,17 +23,29 @@
         <% }); %>
         dispensation = <%= dispensation %>;
         eligibility = <%= eligibility %>;
+        increment = <%= increment %>;
         round = <%= round %>;
+        blocks.forEach(function(block){
+          if (block.company == company){
+            own = 1;
+            eligibility=eligibility-1;
+            console.log(eligibility);
+          }
+        });
         alert = document.getElementById('alert');
         //check Eligibility
         if(eligibility === 0){
           doBid = 1;
           alert.innerHTML = "Ya no cuentas con puntos de eligibilidad.<br>";
-          document.getElementById('btn_send').removeEventListener('click', sendBids);
-          document.getElementById('btn_dis').removeEventListener('click', sendDisp);
-          bidsText.forEach(function(bidText){
-            document.getElementById(bidText).disabled= true;
-          });
+          if (own==0){
+            document.getElementById('btn_send').removeEventListener('click', sendBids);
+            document.getElementById('btn_dis').removeEventListener('click', sendDisp);
+          }
+          for(var i=0;i<blocks.length;i++){
+            if (blocks[i].company != company){
+              document.getElementById(bidsText[i]).disabled= true;
+            }
+          }
         }
 
         //Check useDispensation
@@ -60,7 +72,7 @@
             document.getElementById('alert'+block.name).innerHTML = "Sólo puedes introducir números";
           }
           //Validate that the amount is higher than the minimum
-          else if (bidAmount < block.actualPrice*1.2){
+          else if (bidAmount < Math.floor(block.actualPrice*(1+increment))){
             document.getElementById('alert'+block.name).innerHTML = "El monto es muy bajo";
             error = 1;
           }
@@ -72,7 +84,7 @@
           }
 
         });
-        if (counter>eligibility){
+        if (counter>eligibility && own === 0){
           alert.innerHTML = "Tu número de ofertas es mayor a tu número de eligibilidad";
         } else if (error === 1){
           //Any amount was lower than the minimum
@@ -168,10 +180,10 @@
             <th>Precio mínimo</th>
             <% blocks.forEach(function (block){ %>
               <% if (block.company == company){ %>
-              <td style="width:20px;" align="center" bgcolor="#ee8a8a"><%= block.actualPrice *1.2 %></td>
+              <td style="width:20px;" align="center" bgcolor="#ee8a8a"><%= Math.floor(block.actualPrice * (increment - (-1))) %></td>
               <% } %>
               <% if (block.company != company){ %>
-              <td style="width:20px;" align="center"><%= block.actualPrice *1.2 %></td>
+              <td style="width:20px;" align="center"><%= Math.floor(block.actualPrice * (increment - (-1))) %></td>
               <% } %>
             <% }); %>
           </tr>

@@ -10,6 +10,7 @@ module.exports = function(server){
     //Get a control message to start the timer and round
     socket.on('control', function(data){
       if (data.message === 'start-round'){
+        process.env.INCREMENT=data.increment/100;
         socket.broadcast.emit('control', {message: 'start-round'});
         timer = setTimeout(function(){
           process.env.ROUND++;
