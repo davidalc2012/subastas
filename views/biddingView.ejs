@@ -80,11 +80,13 @@
             document.getElementById('or'+block.name).innerHTML = bidAmount;
             //TODO change the company name
             totalBids.push({company: company, block: block.name, amount: bidAmount});
-            counter++;
+            if (block.company != company){
+              counter++;
+            }
           }
 
         });
-        if (counter>eligibility && own === 0){
+        if (counter>eligibility){
           alert.innerHTML = "Tu número de ofertas es mayor a tu número de eligibilidad";
         } else if (error === 1){
           //Any amount was lower than the minimum

@@ -9,7 +9,7 @@ const CompanySchema = new Schema({
   },
   dispensation: {
     type: Number,
-    default: 3
+    default: 1
   },
   eligibility: {
     type: Number,
