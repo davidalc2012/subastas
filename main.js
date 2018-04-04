@@ -13,6 +13,7 @@ app.use(express.static('./public'));
 process.env.ROUND = 0;
 process.env.COMPANIES = 0;
 process.env.INCREMENT = 0.20;
+process.env.PHASE = 1;
 //Set controller
 biddingController(app);
 

@@ -6,10 +6,25 @@ var info = document.getElementById('info'),
     btn_start = document.getElementById('start'),
     btn_stop = document.getElementById('stop'),
     btn_add = document.getElementById('addBlock'),
+    btn_phase = document.getElementById('nextPhase'),
     companies = document.getElementById('companies'),
     blocks = document.getElementById('blocks'),
     increment = document.getElementById('increment'),
     round = document.getElementById('round');
+    phase = document.getElementById('phase');
+
+//Go to add blocks page
+btn_phase.addEventListener('click', function(){
+  $.ajax({
+    type: 'POST',
+    url: '/phase',
+    data: 1,
+    success: function(data){
+      phase.innerHTML = "Fase actual: " + data;
+      increment.value = 10;
+    }
+  });
+});
 
 //Go to add blocks page
 btn_add.addEventListener('click', function(){
@@ -59,7 +74,7 @@ socket.on('control', function(data){
       type: 'GET',
       url: '/blocks',
       success: function(data){
-        companies.innerHTML = '<thead><tr><th style="width:25px;" align="center">Bloque</th><th style="width:25px;" align="center">Precio inicial</th><th style="width:25px;" align="center">Precio actual</th><th style="width:25px;" align="center">Compañia</th></tr></thead>';
+        blocks.innerHTML = '<thead><tr><th style="width:25px;" align="center">Bloque</th><th style="width:25px;" align="center">Precio inicial</th><th style="width:25px;" align="center">Precio actual</th><th style="width:25px;" align="center">Compañia</th></tr></thead>';
         data.forEach(function(block){
           blocks.innerHTML += "<tr><td>" + block.name + "</td><td>" + block.initialPrice + "</td><td>" + block.actualPrice + "</td><td>" + block.company + "</td></tr>";
         });

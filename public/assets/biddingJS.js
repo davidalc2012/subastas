@@ -11,6 +11,9 @@ socket.on('control', function(data){
     }
   });
   if (data.message === "end-round"){
+    if (phase === 2 && counter < eligibility){
+      doBid = 0;
+    }
     if (doBid === 0) {
       $.ajax({
         type: 'POST',

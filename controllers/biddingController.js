@@ -17,6 +17,12 @@ module.exports = function(app){
     process.env.COMPANIES = count;
   })
 
+  //Register the new company
+  app.post('/phase', urlencoderParser, function(req, res){
+    process.env.PHASE = 2;
+    res.send(process.env.PHASE);
+  });
+
   //Get the blocks
   app.get('/blocks', function(req, res){
     Block.find({}).sort({name: 1}).then(function(block){
@@ -94,8 +100,7 @@ app.post('/eligibility', urlencoderParser, function(req, res){
         blocksRes.push({name: block.name, actualPrice: block.actualPrice, company: block.company});
       });
       Company.findOne({name: req.params.name}).then(function(company){
-        res.render('biddingView', {blocks: blocksRes, dispensation: company.dispensation, eligibility: company.eligibility, company: req.params.name, round: process.env.ROUND, increment: process.env.INCREMENT});
-
+        res.render('biddingView', {blocks: blocksRes, dispensation: company.dispensation, eligibility: company.eligibility, company: req.params.name, round: process.env.ROUND, increment: process.env.INCREMENT, phase: process.env.PHASE});
       });
     });
   });
