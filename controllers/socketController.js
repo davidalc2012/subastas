@@ -15,7 +15,7 @@ module.exports = function(server){
         timer = setTimeout(function(){
           process.env.ROUND++;
           resumeController(io);
-        }, 240000); //TODO cambiar tiempo
+        }, 300000); //TODO cambiar tiempo
       } else if (data.message === "stop-round"){
         clearTimeout(timer);
         process.env.ROUND++;

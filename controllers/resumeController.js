@@ -6,7 +6,7 @@ var Block = require('../models/block');
 var Resume = require('../models/resume');
 var urlencoderParser = bodyParser.urlencoded({extended: false});
 
-mongoose.connect('mongodb://localhost/biding');
+mongoose.connect('mongodb://localhost/bidding');
 mongoose.Promise = global.Promise;
 
 module.exports = function(io){

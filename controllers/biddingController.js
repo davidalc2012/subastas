@@ -8,7 +8,7 @@ var urlencoderParser = bodyParser.urlencoded({extended: false});
 
 
 //TODO change the IP
-mongoose.connect('mongodb://localhost/biding');
+mongoose.connect('mongodb://localhost/bidding');
 mongoose.Promise = global.Promise;
 
 module.exports = function(app){

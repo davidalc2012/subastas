@@ -6,7 +6,7 @@ mongoose.Promise = global.Promise;
 
 //Connect to data base before test runs
 function connect(funct){
-  mongoose.connect('mongodb://localhost/biding');
+  mongoose.connect('mongodb://localhost/bidding');
   mongoose.connection.once('open', function(){
     console.log('Connection has been made');
     if (funct) funct();

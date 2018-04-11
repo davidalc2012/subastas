@@ -1,5 +1,5 @@
 //Make connection
-var socket = io.connect('http://148.205.36.16:4000');
+var socket = io.connect('http://148.205.36.162:4000');
 
 //Query DOM
 var info = document.getElementById('info'),
@@ -28,7 +28,7 @@ btn_phase.addEventListener('click', function(){
 
 //Go to add blocks page
 btn_add.addEventListener('click', function(){
-  window.location.href = 'http://148.205.36.16:4000/blocks/new';
+  window.location.href = 'http://148.205.36.162:4000/blocks/new';
 });
 
 //Start the round
@@ -74,7 +74,7 @@ socket.on('control', function(data){
       type: 'GET',
       url: '/blocks',
       success: function(data){
-        blocks.innerHTML = '<thead><tr><th style="width:25px;" align="center">Bloque</th><th style="width:25px;" align="center">Precio inicial</th><th style="width:25px;" align="center">Precio actual</th><th style="width:25px;" align="center">Compañia</th></tr></thead>';
+        blocks.innerHTML = '<thead><tr><th style="width:25px;" align="center">Bloque</th><th style="width:25px;" align="center">Precio inicial</th><th style="width:25px;" align="center">PVMA</th><th style="width:25px;" align="center">Compañia</th></tr></thead>';
         data.forEach(function(block){
           blocks.innerHTML += "<tr><td>" + block.name + "</td><td>" + block.initialPrice + "</td><td>" + block.actualPrice + "</td><td>" + block.company + "</td></tr>";
         });
