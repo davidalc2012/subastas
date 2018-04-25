@@ -13,7 +13,7 @@ socket.on('control', function(data){
 });
 
 //Send the company for register
-btn_register.addEventListener('click',function(){
+var sendCompany = function(){
   if (companyName.value === ""){
     info.innerHTML = "Introduce el nombre de la empresa";
   } else {
@@ -30,7 +30,10 @@ btn_register.addEventListener('click',function(){
           eligibility: data.eligibility,
           dispensation: data.dispensation
         });
+        btn_register.removeEventListener('click', sendCompany);
       }
     });
   }
-});
+};
+
+btn_register.addEventListener('click', sendCompany);

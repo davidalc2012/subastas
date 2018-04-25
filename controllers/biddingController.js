@@ -71,15 +71,20 @@ module.exports = function(app){
 //Register the new company
 app.post('/login', urlencoderParser, function(req, res){
   var newCompany = Company(req.body);
-  newCompany.save(function(err){
-    if (err) {
-      console.log('error: ' + err);
+  Company.count({name: req.body.name}, function(err, count){
+    if (count === 0){
+      newCompany.save(function(err){
+        if (err) {
+          console.log('error: ' + err);
+        }
+        Company.count({}, function(err, count){
+          process.env.COMPANIES = count;
+        })
+      });
     }
-    Company.count({}, function(err, count){
-      process.env.COMPANIES = count;
-    })
     res.json(newCompany);
   });
+
 });
 
 //handle eligibility decrement
