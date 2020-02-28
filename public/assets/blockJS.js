@@ -27,5 +27,5 @@ btn_register.addEventListener('click',function(){
 
 //Return to control
 btn_return.addEventListener('click',function(){
-  window.location.href = 'http://148.205.36.162:4000/control/';
+  window.location.href = 'http://148.205.36.16:4000/control/';
 });

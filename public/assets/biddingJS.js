@@ -1,5 +1,5 @@
 //Make connection
-var socket = io.connect('http://148.205.36.162:4000');
+var socket = io.connect('http://148.205.36.16:4000');
 
 //Query DOM
 var info = document.getElementById('info');
@@ -26,7 +26,7 @@ socket.on('control', function(data){
         }
       });
     }
-    window.location.href = 'http://148.205.36.162:4000/resume';
+    window.location.href = 'http://148.205.36.16:4000/resume';
   }
 });
 
