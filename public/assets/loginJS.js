@@ -30,6 +30,7 @@ var sendCompany = function(){
           eligibility: data.eligibility,
           dispensation: data.dispensation
         });
+        
         btn_register.removeEventListener('click', sendCompany);
       }
     });
