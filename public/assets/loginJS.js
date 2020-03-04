@@ -24,7 +24,7 @@ var sendCompany = function(){
       data: {name: companyName.value},
       success: function(data){
         //TODO block the buttons and send message for waiting to the end of round
-        info.innerHTML = "Registro efectuado correctamente. Espera a que comiencen las rondas";
+        info.innerHTML = "Registro efectuado correctamente. Espera a que comiencen las  rondas";
         socket.emit('register',{
           name: data.name,
           eligibility: data.eligibility,
