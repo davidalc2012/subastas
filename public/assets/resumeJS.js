@@ -1,5 +1,5 @@
 //Make connection
-var socket = io.connect('http://148.205.36.162:4000');
+var socket = io.connect('http://148.205.36.16:4000');
 
 var roundsDIV = document.getElementById("rounds"),
   blocksNames = [];
@@ -87,6 +87,6 @@ $.ajax({
 
 socket.on('control', function(data){
   if (data.message === "start-round"){
-    window.location.href = 'http://148.205.36.162:4000/bidding/'+ sessionStorage.getItem('company');
+    window.location.href = 'http://148.205.36.16:4000/bidding/'+ sessionStorage.getItem('company');
   }
 });

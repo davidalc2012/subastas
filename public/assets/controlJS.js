@@ -1,5 +1,5 @@
 //Make connection
-var socket = io.connect('http://148.205.36.162:4000');
+var socket = io.connect('http://148.205.36.16:4000');
 
 //Query DOM
 var info = document.getElementById('info'),
@@ -28,7 +28,7 @@ btn_phase.addEventListener('click', function(){
 
 //Go to add blocks page
 btn_add.addEventListener('click', function(){
-  window.location.href = 'http://148.205.36.162:4000/blocks/new';
+  window.location.href = 'http://148.205.36.16:4000/blocks/new';
 });
 
 //Start the round
