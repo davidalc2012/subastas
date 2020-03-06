@@ -5,7 +5,7 @@ En este documento veremos como correr y ocupar el programa de subastas para prof
 
 
 ### Requerimientos
-La máquina puede ocupar cualquier sistema operativo, sin embargo es de gran importancia que tenga el programa Mongo instalado.
+La máquina puede ocupar cualquier sistema operativo, sin embargo es de gran importancia que tenga el programa Mongo instalado. Al igual que la librería express instalada, para esto solamente deberemos correr el comando npm install express en nuestra terminal ( para MAC y Linux ).
 
 ### Descargar el proyecto
 Una vez seguro que cuentas con todo lo necesario, es importante tener el proyecto dentro de la misma computadora. El único repositorio creado por nosotros es : https://github.com/davidalc2012/subastas . Una vez dentro del link descargar el proyecto y colocarlos en una ubicación que podamos recordar (En nuestro caso es : /Documents/Trabajo/Subastas).
