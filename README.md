@@ -47,4 +47,8 @@ use bidding
 db.dropDatabase()
 ## Errores en la versión V.1.0.1
 
+Registrar primero bloques y después empresas.
+Elegibilidad se queda en 1, cuando debería de pasar a 0. 
+
+
 
