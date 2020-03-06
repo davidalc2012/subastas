@@ -40,7 +40,11 @@ Para entrar a la vista de la persona que llevará el control de la aplicación e
  
 #### 
 
-
+## Limpiar la base de datos
+mongo
+show dbs
+use bidding 
+db.dropDatabase()
 ## Errores en la versión V.1.0.1
 
 
